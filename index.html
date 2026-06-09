@@ -2,34 +2,248 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Link ERP Interno</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procurement Process Flow</title>
     <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f3f4;
+            color: #676a6c;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2f4050;
+            font-size: 32px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 40px;
+        }
+
+        .flow-container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Linea verticale di collegamento per il flusso */
+        .flow-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 40px;
+            width: 4px;
+            background: #cbd5e1;
+            z-index: 1;
+        }
+
+        .flow-step {
+            position: relative;
+            margin-bottom: 30px;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 20px 20px 20px 80px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            z-index: 2;
+        }
+
+        /* Cerchio numerato del flusso */
+        .step-number {
+            position: absolute;
+            left: 20px;
+            top: 22px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #2f4050;
+            color: #ffffff;
+            text-align: center;
+            line-height: 44px;
+            font-weight: bold;
+            font-size: 18px;
+            z-index: 3;
+        }
+
+        .step-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+            gap: 15px;
+        }
+
+        .step-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1c84c6;
+            margin: 0;
+        }
+
+        .step-actor {
+            font-size: 12px;
+            background: #e7eaec;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .step-details {
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .step-details ul {
+            margin: 5px 0 0 0;
+            padding-left: 20px;
+        }
+
         .btn-erp {
             background-color: #1ab394;
             color: white;
             border: none;
             padding: 10px 20px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
             border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 2px 3px rgba(26, 179, 148, 0.2);
         }
+
         .btn-erp:hover {
             background-color: #18a689;
+        }
+
+        .btn-erp:active {
+            transform: scale(0.98);
+        }
+        
+        .no-action {
+            color: #7f8c8d;
+            font-style: italic;
+            font-size: 13px;
+            padding: 10px 0;
         }
     </style>
 </head>
 <body>
 
-    <button type="button" class="btn-erp" onclick="inviaMessaggioNavigazione()">
-        Apri Ordine Cliente #1
-    </button>
+    <h1>Procurement</h1>
+
+    <div class="flow-container">
+
+        <div class="flow-step">
+            <div class="step-number">1</div>
+            <div class="step-header">
+                <div>
+                    <h3 class="step-title">Emissione della RdA (Richiesta di Acquisto)</h3>
+                </div>
+                <span class="step-actor">Utente aziendale / Reparto richiedente</span>
+            </div>
+            <p class="step-details">
+                Viene identificato un bisogno (materiali, servizi, software). Il richiedente compila la RdA nel sistema gestionale (ERP) specificando quantità, descrizione, codici e data di consegna desiderata.
+            </p>
+            <div style="margin-top: 15px;">
+                <button type="button" class="btn-erp" onclick="inviaMessaggioNavigazione('/home/workArea/purchaseRequestsAppl/1')">
+                    Crea RDA
+                </button>
+            </div>
+        </div>
+
+        <div class="flow-step">
+            <div class="step-number">2</div>
+            <div class="step-header">
+                <div>
+                    <h3 class="step-title">Approvazione della RdA</h3>
+                </div>
+                <span class="step-actor">Responsabile di reparto / Controllo di gestione</span>
+            </div>
+            <p class="step-details">
+                La RdA viene sottoposta a un flusso di approvazione (workflow). Viene verificata la conformità al budget disponibile. Se approvata, la RdA diventa visibile all'ufficio acquisti (Buyer).
+            </p>
+            <div style="margin-top: 15px;">
+                <button type="button" class="btn-erp" onclick="inviaMessaggioNavigazione('/home/desktop/CP-Ufficio%20Acquisti')">
+                    Approva RdA
+                </button>
+            </div>
+        </div>
+
+        <div class="flow-step">
+            <div class="step-number">3</div>
+            <div class="step-header">
+                <div>
+                    <h3 class="step-title">Sourcing e Gestione Fornitori</h3>
+                </div>
+                <span class="step-actor">Buyer (Ufficio Acquisti)</span>
+            </div>
+            <p class="step-details">
+                Se il bene/servizio è nuovo, il buyer emette una RfQ (Request for Quotation) a più fornitori per ricevere e comparare preventivi. Se il fornitore è già abituale, si procede direttamente alla conversione.
+            </p>
+            <div class="no-action">Azione gestita internamente al modulo Sourcing</div>
+        </div>
+
+        <div class="flow-step">
+            <div class="step-number">4</div>
+            <div class="step-header">
+                <div>
+                    <h3 class="step-title">Creazione dell'Ordine di Acquisto (OdA)</h3>
+                </div>
+                <span class="step-actor">Buyer (Ufficio Acquisti)</span>
+            </div>
+            <p class="step-details">
+                La RdA approvata viene convertita in un Ordine di Acquisto formale (Purchase Order - PO) nel sistema ERP, definendo i dettagli legali, commerciali, prezzi, Incoterms e termini di pagamento.
+            </p>
+            <div style="margin-top: 15px;">
+                <button type="button" class="btn-erp" onclick="inviaMessaggioNavigazione('/home/workArea/purchaseRequestsBuy/1')">
+                    Converte RDA in Ordine
+                </button>
+            </div>
+        </div>
+
+        <div class="flow-step">
+            <div class="step-number">5</div>
+            <div class="step-header">
+                <div>
+                    <h3 class="step-title">Approvazione dell'Ordine (OdA)</h3>
+                </div>
+                <span class="step-actor">Direttore Acquisti / Management</span>
+            </div>
+            <p class="step-details">
+                L'ordine formale subisce un secondo livello di controllo interno per garantire che i prezzi e le condizioni inserite dal buyer siano corretti e congrui con le autorizzazioni di spesa.
+            </p>
+            <div class="no-action">Controllo tramite Workflow Approvativo Ordini</div>
+        </div>
+
+        <div class="flow-step">
+            <div class="step-number">6</div>
+            <div class="step-header">
+                <div>
+                    <h3 class="step-title">Invio dell'Ordine al Fornitore</h3>
+                </div>
+                <span class="step-actor">Sistema ERP / Buyer</span>
+            </div>
+            <p class="step-details">
+                L'ordine approvato viene ufficialmente trasmesso al fornitore selezionato tramite i canali configurati:
+                <ul>
+                    <li><strong>EDI:</strong> Invio automatico tra gestionali.</li>
+                    <li><strong>Portale Fornitori:</strong> Caricamento su piattaforma web dedicata.</li>
+                    <li><strong>Email:</strong> Invio automatico del documento in formato PDF.</li>
+                </ul>
+            </p>
+            <div class="no-action">Flusso automatizzato al rilascio dell'OdA</div>
+        </div>
+
+    </div>
 
     <script>
-    function inviaMessaggioNavigazione() {
-        const percorsoTarget = "/home/workArea/salesOrder/1";
+    function inviaMessaggioNavigazione(percorsoTarget) {
         
+        // Costruzione del payload con il percorso relativo richiesto
         const payload = {
             type: 'ROUTER_NAVIGATION',
             action: 'navigate',
@@ -37,7 +251,7 @@
             route: percorsoTarget
         };
 
-        console.log("Invio comando via postMessage...");
+        console.log("Invio comando via postMessage per il percorso: " + percorsoTarget);
 
         try {
             // Invia l'oggetto nativo al parent
@@ -47,7 +261,7 @@
             
             console.log("Messaggio inviato al parent senza blocchi di sicurezza.");
         } catch (e) {
-            console.error("Errore nell'invio:", e);
+            console.error("Errore nell'invio del postMessage:", e);
         }
     }
     </script>
