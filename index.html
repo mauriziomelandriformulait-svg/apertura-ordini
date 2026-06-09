@@ -1,56 +1,74 @@
-<script>
-function apriOrdineSpecificoDaIframe() {
-    const mainWindow = window.parent;
-    
-    if (!mainWindow) {
-        console.error("Impossibile accedere alla finestra principale.");
-        return;
-    }
-
-    const percorsoTarget = '/home/workArea/salesOrder/1';
-
-    // TENTATIVO 1: Modifica diretta dell'URL (Metodo più sicuro per i router basati su #)
-    // Se l'ERP usa il sistema dei tab/workarea, questo forza il browser a cambiare rotta.
-    try {
-        console.log("Tentativo 1: Cambiamo direttamente l'hash della finestra principale...");
-        mainWindow.location.hash = '#' + percorsoTarget;
-        
-        // Se l'URL cambia ma la pagina non si muove, aiutiamo Angular a svegliarsi:
-        if (mainWindow.angular) {
-            const appElement = mainWindow.document.querySelector('[ng-app]') || mainWindow.document.body;
-            const $injector = mainWindow.angular.element(appElement).injector();
-            if ($injector && $injector.has('$rootScope')) {
-                $injector.get('$rootScope').$apply();
-            }
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Link ERP Interno</title>
+    <style>
+        .btn-erp {
+            background-color: #1ab394;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
         }
-        return; // Se ha successo, ci fermiamo qui
-    } catch (e) {
-        console.warn("Fallito il tentativo diretto sull'hash, provo con i servizi Angular...", e);
-    }
+        .btn-erp:hover {
+            background-color: #18a689;
+        }
+    </style>
+</head>
+<body>
 
-    // TENTATIVO 2: Fallback tramite l'injector di Angular se il primo fallisce
-    if (mainWindow.angular) {
-        const appElement = mainWindow.document.querySelector('[ng-app]') || mainWindow.document.body;
-        const $injector = mainWindow.angular.element(appElement).injector();
-        
-        if ($injector) {
-            const $location = $injector.has('$location') ? $injector.get('$location') : null;
-            const $timeout = $injector.has('$timeout') ? $injector.get('$timeout') : null;
-            
-            if ($location) {
-                // Usiamo $timeout per assicurarci di non andare in conflitto con i cicli di update/digest dell'ERP
-                const naviga = function() {
-                    console.log("Tentativo 2: Navigazione controllata con $location.path");
-                    $location.path(percorsoTarget);
-                };
+    <button type="button" class="btn-erp" onclick="forzaAperturaOrdine()">
+        Apri Ordine Cliente #1
+    </button>
 
-                if ($timeout) {
-                    $timeout(naviga);
-                } else {
-                    mainWindow.angular.element(appElement).scope().$apply(naviga);
+    <script>
+    function forzaAperturaOrdine() {
+        const mainWindow = window.parent;
+        if (!mainWindow) {
+            console.error("Impossibile accedere alla finestra principale.");
+            return;
+        }
+
+        const percorsoTarget = "/home/workArea/salesOrder/1";
+
+        // STRATEGIA 1: Cambia l'hash e forza l'evento di navigazione del browser
+        console.log("Esecuzione Strategia 1: Forzatura Hash URL...");
+        mainWindow.location.hash = "#" + percorsoTarget;
+
+        // STRATEGIA 2: Sveglia il router di Angular moderno se la pagina non si è mossa
+        // Negli ERP Angular, spesso viene esposto un router globale o si può triggerare l'evento di cambio URL
+        try {
+            const popStateEvent = new PopStateEvent('popstate');
+            mainWindow.dispatchEvent(popStateEvent);
+            console.log("Evento popstate lanciato con successo.");
+        } catch (e) {
+            console.warn("Impossibile lanciare popstate:", e);
+        }
+
+        // STRATEGIA 3: Fallback tramite NgZone (se accessibile globalmente nell'app)
+        // Molti framework Angular espongono l'applicazione radice per il debug o per tool esterni
+        try {
+            const appElement = mainWindow.document.querySelector('app-root') || mainWindow.document.querySelector('[ng-version]');
+            if (appElement && mainWindow.ng) {
+                console.log("Rilevato Angular moderno. Tento il routing interno tramite la Zone...");
+                // Recupera il router di Angular dall'elemento DOM
+                const router = mainWindow.ng.getComponent(appElement)?.__ngSimpleChanges__ || mainWindow.ng.getInjector(appElement).get(mainWindow.ng.core.Router);
+                if (router) {
+                    router.navigateByUrl(percorsoTarget);
+                    console.log("Navigazione passata al Router di Angular.");
                 }
             }
+        } catch (err) {
+            // Silenzioso, è solo un tentativo di debug avanzato
+            console.log("Nota: Struttura 'ng' globale non accessibile (normale in produzione).");
         }
     }
-}
-</script>
+    </script>
+
+</body>
+</html>
