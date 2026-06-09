@@ -1,99 +1,56 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <title>Link ERP Interno</title>
-    <style>
-        /* Un minimo di stile per il pulsante, personalizzalo come preferisci */
-        .btn-erp {
-            background-color: #1ab394; /* Colore tipico dei temi Inspinia/Angular ERP */
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: bold;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .btn-erp:hover {
-            background-color: #18a689;
-        }
-    </style>
-</head>
-<body>
+<script>
+function apriOrdineSpecificoDaIframe() {
+    const mainWindow = window.parent;
+    
+    if (!mainWindow) {
+        console.error("Impossibile accedere alla finestra principale.");
+        return;
+    }
 
-    <button type="button" class="btn-erp" onclick="apriOrdineSpecificoDaIframe()">
-        Apri Ordine Cliente #1
-    </button>
+    const percorsoTarget = '/home/workArea/salesOrder/1';
 
-    <script>
-    function apriOrdineSpecificoDaIframe() {
-        // Accedi alla finestra principale dell'ERP
-        const mainWindow = window.parent;
+    // TENTATIVO 1: Modifica diretta dell'URL (Metodo più sicuro per i router basati su #)
+    // Se l'ERP usa il sistema dei tab/workarea, questo forza il browser a cambiare rotta.
+    try {
+        console.log("Tentativo 1: Cambiamo direttamente l'hash della finestra principale...");
+        mainWindow.location.hash = '#' + percorsoTarget;
         
-        if (mainWindow && mainWindow.angular) {
-            // Cerca l'elemento radice dell'applicazione Angular
+        // Se l'URL cambia ma la pagina non si muove, aiutiamo Angular a svegliarsi:
+        if (mainWindow.angular) {
             const appElement = mainWindow.document.querySelector('[ng-app]') || mainWindow.document.body;
             const $injector = mainWindow.angular.element(appElement).injector();
-            
-            if ($injector) {
-                // Recuperiamo i servizi di routing nativi di AngularJS o il workareaService come fallback
-                const $location = $injector.has('$location') ? $injector.get('$location') : null;
-                const $state = $injector.has('$state') ? $injector.get('$state') : null;
-                const workareaService = $injector.has('workareaService') ? $injector.get('workareaService') : null;
-                
-                // Eseguiamo l'azione dentro il ciclo digest di Angular ($apply)
-                mainWindow.angular.element(appElement).scope().$apply(function() {
-                    try {
-                        // TENTATIVO A: Navigazione diretta tramite l'URL del router ($location)
-                        if ($location) {
-                            console.log("Navigazione tramite $location verso l'ordine 1...");
-                            $location.path('/home/workArea/salesOrder/1');
-                        } 
-                        // TENTATIVO B: Navigazione tramite Stato (UI-Router, molto comune in questi template)
-                        else if ($state && typeof $state.go === 'function') {
-                            console.log("Navigazione tramite $state verso lo stato salesOrder...");
-                            // Nota: Se conosci il nome esatto dello stato (es. 'home.workArea.salesOrder') sostituiscilo qui sotto
-                            $state.go('home.workArea.salesOrder', { id: 1 }); 
-                        }
-                        // TENTATIVO C: Fallback sul workareaService configurato con la rotta specifica
-                        else if (workareaService) {
-                            console.log("Fallback su workareaService con rotta specifica...");
-                            const menuItem = {
-                                id: 'salesOrder_1', 
-                                waId: 'ORCLI010',
-                                title: 'Ordine Cliente #1',
-                                route: 'home/workArea/salesOrder/1',
-                                url: '/home/workArea/salesOrder/1'
-                            };
-
-                            if (typeof workareaService.openProgram === 'function') {
-                                workareaService.openProgram(menuItem);
-                            } else if (typeof workareaService.open === 'function') {
-                                workareaService.open(menuItem); 
-                            } else if (typeof workareaService.addWorkarea === 'function') {
-                                workareaService.addWorkarea(menuItem);
-                            } else if (typeof workareaService.add === 'function') {
-                                workareaService.add(menuItem);
-                            } else {
-                                console.warn("Metodo di apertura non identificato su workareaService.");
-                            }
-                        } else {
-                            console.error("Nessun servizio di routing o workarea identificato nell'ERP.");
-                        }
-                    } catch (error) {
-                        console.error("Errore durante l'esecuzione del cambio rotta:", error);
-                    }
-                });
-            } else {
-                console.error("Impossibile recuperare l'injector di AngularJS.");
+            if ($injector && $injector.has('$rootScope')) {
+                $injector.get('$rootScope').$apply();
             }
-        } else {
-            console.error("Impossibile accedere al framework principale o AngularJS non è presente nel parent.");
+        }
+        return; // Se ha successo, ci fermiamo qui
+    } catch (e) {
+        console.warn("Fallito il tentativo diretto sull'hash, provo con i servizi Angular...", e);
+    }
+
+    // TENTATIVO 2: Fallback tramite l'injector di Angular se il primo fallisce
+    if (mainWindow.angular) {
+        const appElement = mainWindow.document.querySelector('[ng-app]') || mainWindow.document.body;
+        const $injector = mainWindow.angular.element(appElement).injector();
+        
+        if ($injector) {
+            const $location = $injector.has('$location') ? $injector.get('$location') : null;
+            const $timeout = $injector.has('$timeout') ? $injector.get('$timeout') : null;
+            
+            if ($location) {
+                // Usiamo $timeout per assicurarci di non andare in conflitto con i cicli di update/digest dell'ERP
+                const naviga = function() {
+                    console.log("Tentativo 2: Navigazione controllata con $location.path");
+                    $location.path(percorsoTarget);
+                };
+
+                if ($timeout) {
+                    $timeout(naviga);
+                } else {
+                    mainWindow.angular.element(appElement).scope().$apply(naviga);
+                }
+            }
         }
     }
-    </script>
-
-</body>
-</html>
+}
+</script>
