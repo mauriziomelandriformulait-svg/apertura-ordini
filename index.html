@@ -16,7 +16,7 @@
         h1 {
             text-align: center;
             color: #2f4050;
-            font-size: 42px; /* Dimensione aumentata */
+            font-size: 42px;
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 40px;
@@ -33,8 +33,17 @@
             background: #ffffff;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            overflow-x: auto; /* Attiva lo scroll se lo schermo è troppo piccolo */
+            overflow-x: auto;
             gap: 10px;
+        }
+
+        /* Contenitore per impilare Creazione OdA e Supplier */
+        .vertical-step-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            flex: 1;
+            min-width: 160px;
         }
 
         /* Scheda del singolo step */
@@ -53,6 +62,11 @@
             min-height: 200px;
             box-sizing: border-box;
             transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        /* Variante per le schede nel gruppo verticale per ottimizzare lo spazio */
+        .vertical-step-group .flow-card {
+            min-height: 180px;
         }
 
         .flow-card:hover {
@@ -114,7 +128,7 @@
             transition: background-color 0.2s, transform 0.1s;
             box-shadow: 0 2px 3px rgba(26, 179, 148, 0.2);
             width: 100%;
-            margin-top: auto; /* Spinge il bottone sempre in fondo alla card */
+            margin-top: auto;
             box-sizing: border-box;
         }
 
@@ -155,38 +169,38 @@
             <div class="card-icon">✅</div>
             <h3 class="card-title">2. Approvazione</h3>
             <p class="card-actor">Responsabile / Budget</p>
-            <button type="button" class="btn-erp" onclick="inviaMessaggioNavigazione('/home/desktop/CP-Ufficio%20Acquisti')">
+            <button type="button" class="btn-erp" onclick="inviaMessaggioNavigazione('https://diapdemo.formula.it:8282/due/#/home/desktop/MT%20-%20TODOLIST')">
                 Approva RdA
             </button>
         </div>
 
         <div class="flow-arrow">➡️</div>
 
-        <div class="flow-card">
-            <div class="card-icon">🔍</div>
-            <h3 class="card-title">3. Supplier</h3>
-            <p class="card-actor">Buyer / Acquisti</p>
-            <button type="button" class="btn-erp" onclick="inviaMessaggioNavigazione('https://diapdemo.formula.it:8282/due/#/home/workArea/subjectListAnid/1')">
-                Gestisci Fornitori
-            </button>
-        </div>
-
-        <div class="flow-arrow">➡️</div>
-
-        <div class="flow-card">
-            <div class="card-icon">🛒</div>
-            <h3 class="card-title">4. Creazione OdA</h3>
-            <p class="card-actor">Buyer / Acquisti</p>
-            <button type="button" class="btn-erp" onclick="inviaMessaggioNavigazione('https://diapdemo.formula.it:8282/due/#/home/workArea/purchaseOrders/1')">
-                Converti in Ordine
-            </button>
+        <div class="vertical-step-group">
+            <div class="flow-card">
+                <div class="card-icon">🛒</div>
+                <h3 class="card-title">3. Creazione OdA</h3>
+                <p class="card-actor">Buyer / Acquisti</p>
+                <button type="button" class="btn-erp" onclick="inviaMessaggioNavigazione('https://diapdemo.formula.it:8282/due/#/home/workArea/purchaseOrders/1')">
+                    Converti in Ordine
+                </button>
+            </div>
+            
+            <div class="flow-card">
+                <div class="card-icon">🔍</div>
+                <h3 class="card-title">Supplier</h3>
+                <p class="card-actor">Buyer / Acquisti</p>
+                <button type="button" class="btn-erp" onclick="inviaMessaggioNavigazione('https://diapdemo.formula.it:8282/due/#/home/workArea/subjectListAnid/1')">
+                    Gestisci Fornitori
+                </button>
+            </div>
         </div>
 
         <div class="flow-arrow">➡️</div>
 
         <div class="flow-card">
             <div class="card-icon">👔</div>
-            <h3 class="card-title">5. Autorizzazione</h3>
+            <h3 class="card-title">4. Autorizzazione</h3>
             <p class="card-actor">Direzione Acquisti</p>
             <span class="badge-info">Workflow</span>
         </div>
@@ -195,7 +209,7 @@
 
         <div class="flow-card">
             <div class="card-icon">🚀</div>
-            <h3 class="card-title">6. Invio Ordine</h3>
+            <h3 class="card-title">5. Invio Ordine</h3>
             <p class="card-actor">Sistema ERP / EDI</p>
             <span class="badge-info">Automatico</span>
         </div>
@@ -205,13 +219,11 @@
     <script>
     function inviaMessaggioNavigazione(percorsoTarget) {
         
-        // Se viene passato un URL completo con l'hash, estraiamo la rotta interna per sicurezza del router ERP
         let routePath = percorsoTarget;
         if (percorsoTarget.includes('#')) {
             routePath = percorsoTarget.split('#')[1];
         }
 
-        // Struttura del payload standard per il router dell'ERP
         const payload = {
             type: 'ROUTER_NAVIGATION',
             action: 'navigate',
@@ -222,12 +234,8 @@
         console.log("Invio comando via postMessage per il percorso: " + percorsoTarget);
 
         try {
-            // Invio al sistema nativo dell'applicazione Padre (Parent)
             window.parent.postMessage(payload, '*');
-            
-            // Invio fallback sotto forma di stringa JSON per compatibilità
             window.parent.postMessage(JSON.stringify(payload), '*');
-            
             console.log("Messaggio inviato correttamente al sistema ERP.");
         } catch (e) {
             console.error("Errore durante l'esecuzione del postMessage:", e);
