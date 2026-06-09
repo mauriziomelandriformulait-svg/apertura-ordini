@@ -22,50 +22,51 @@
 </head>
 <body>
 
-    <button type="button" class="btn-erp" onclick="forzaAperturaOrdine()">
+    <button type="button" class="btn-erp" onclick="navigaOrdinePrincipale()">
         Apri Ordine Cliente #1
     </button>
 
     <script>
-    function forzaAperturaOrdine() {
-        const mainWindow = window.parent;
-        if (!mainWindow) {
-            console.error("Impossibile accedere alla finestra principale.");
-            return;
-        }
-
+    function navigaOrdinePrincipale() {
         const percorsoTarget = "/home/workArea/salesOrder/1";
-
-        // STRATEGIA 1: Cambia l'hash e forza l'evento di navigazione del browser
-        console.log("Esecuzione Strategia 1: Forzatura Hash URL...");
-        mainWindow.location.hash = "#" + percorsoTarget;
-
-        // STRATEGIA 2: Sveglia il router di Angular moderno se la pagina non si è mossa
-        // Negli ERP Angular, spesso viene esposto un router globale o si può triggerare l'evento di cambio URL
+        
+        // STRATEGIA 1: postMessage (Il modo standard in Angular moderno per comunicare dagli iframe)
+        // Invia un messaggio formattato sia come stringa che come oggetto (molti ERP intercettano questo)
         try {
-            const popStateEvent = new PopStateEvent('popstate');
-            mainWindow.dispatchEvent(popStateEvent);
-            console.log("Evento popstate lanciato con successo.");
+            console.log("Tentativo 1: Invio postMessage al parent...");
+            const messaggio = {
+                action: 'navigate',
+                url: percorsoTarget,
+                route: percorsoTarget,
+                type: 'ROUTER_NAVIGATION'
+            };
+            
+            window.parent.postMessage(messaggio, '*');
+            window.parent.postMessage(JSON.stringify(messaggio), '*');
         } catch (e) {
-            console.warn("Impossibile lanciare popstate:", e);
+            console.warn("Errore durante il postMessage:", e);
         }
 
-        // STRATEGIA 3: Fallback tramite NgZone (se accessibile globalmente nell'app)
-        // Molti framework Angular espongono l'applicazione radice per il debug o per tool esterni
+        // STRATEGIA 2: Forzatura tramite window.open sul target '_parent'
+        // Se l'ERP usa i percorsi con '#' nell'URL principale, questo ricarica/sposta la finestra madre
         try {
-            const appElement = mainWindow.document.querySelector('app-root') || mainWindow.document.querySelector('[ng-version]');
-            if (appElement && mainWindow.ng) {
-                console.log("Rilevato Angular moderno. Tento il routing interno tramite la Zone...");
-                // Recupera il router di Angular dall'elemento DOM
-                const router = mainWindow.ng.getComponent(appElement)?.__ngSimpleChanges__ || mainWindow.ng.getInjector(appElement).get(mainWindow.ng.core.Router);
-                if (router) {
-                    router.navigateByUrl(percorsoTarget);
-                    console.log("Navigazione passata al Router di Angular.");
-                }
+            console.log("Tentativo 2: Forzatura tramite window.open su _parent...");
+            
+            // Recuperiamo l'origine dell'ERP (es: https://diapdemo.formula.it:8282)
+            const urlCompleto = window.parent.location.origin + "/due/#" + percorsoTarget;
+            
+            // Forza la finestra principale a cambiare indirizzo direttamente
+            window.open(urlCompleto, '_parent');
+        } catch (e) {
+            console.error("Errore durante la navigazione diretta _parent. Potrebbe esserci un blocco di Cross-Origin (CORS):", e);
+            
+            // Fallback estremo se la sicurezza del browser blocca il punto precedente:
+            // Prova a cambiare l'intera location del parent
+            try {
+                window.parent.location.href = window.parent.location.origin + "/due/#" + percorsoTarget;
+            } catch (err) {
+                console.error("Anche il fallback estremo è stato bloccato dal browser:", err);
             }
-        } catch (err) {
-            // Silenzioso, è solo un tentativo di debug avanzato
-            console.log("Nota: Struttura 'ng' globale non accessibile (normale in produzione).");
         }
     }
     </script>
