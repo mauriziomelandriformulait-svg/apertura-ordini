@@ -23,12 +23,12 @@
 </head>
 <body>
 
-    <button type="button" class="btn-erp" onclick="apriGestioneOrdiniDaIframe()">
-        Apri Gestione Ordini
+    <button type="button" class="btn-erp" onclick="apriOrdineSpecificoDaIframe()">
+        Apri Ordine Cliente #1
     </button>
 
     <script>
-    function apriGestioneOrdiniDaIframe() {
+    function apriOrdineSpecificoDaIframe() {
         // Accedi alla finestra principale dell'ERP
         const mainWindow = window.parent;
         
@@ -38,38 +38,52 @@
             const $injector = mainWindow.angular.element(appElement).injector();
             
             if ($injector) {
-                const workareaService = $injector.get('workareaService');
-                
-                // Dati estratti dai log del tuo ERP
-                const menuItem = {
-                    id: 'ORCLI010orcli010r.txt',
-                    waId: 'ORCLI010',
-                    title: 'Gestione ordini',
-                    menuItem: {
-                        id: 'ORCLI010orcli010r.txt',
-                        waId: 'ORCLI010',
-                        title: 'Gestione ordini'
-                    }
-                };
+                // Recuperiamo i servizi di routing nativi di AngularJS o il workareaService come fallback
+                const $location = $injector.has('$location') ? $injector.get('$location') : null;
+                const $state = $injector.has('$state') ? $injector.get('$state') : null;
+                const workareaService = $injector.has('workareaService') ? $injector.get('workareaService') : null;
                 
                 // Eseguiamo l'azione dentro il ciclo digest di Angular ($apply)
                 mainWindow.angular.element(appElement).scope().$apply(function() {
                     try {
-                        // Proviamo in sequenza i metodi più probabili dei framework gestionali
-                        if (typeof workareaService.openProgram === 'function') {
-                            workareaService.openProgram(menuItem);
-                        } else if (typeof workareaService.open === 'function') {
-                            workareaService.open(menuItem); 
-                        } else if (typeof workareaService.addWorkarea === 'function') {
-                            workareaService.addWorkarea(menuItem);
-                        } else if (typeof workareaService.add === 'function') {
-                            workareaService.add(menuItem);
+                        // TENTATIVO A: Navigazione diretta tramite l'URL del router ($location)
+                        if ($location) {
+                            console.log("Navigazione tramite $location verso l'ordine 1...");
+                            $location.path('/home/workArea/salesOrder/1');
+                        } 
+                        // TENTATIVO B: Navigazione tramite Stato (UI-Router, molto comune in questi template)
+                        else if ($state && typeof $state.go === 'function') {
+                            console.log("Navigazione tramite $state verso lo stato salesOrder...");
+                            // Nota: Se conosci il nome esatto dello stato (es. 'home.workArea.salesOrder') sostituiscilo qui sotto
+                            $state.go('home.workArea.salesOrder', { id: 1 }); 
+                        }
+                        // TENTATIVO C: Fallback sul workareaService configurato con la rotta specifica
+                        else if (workareaService) {
+                            console.log("Fallback su workareaService con rotta specifica...");
+                            const menuItem = {
+                                id: 'salesOrder_1', 
+                                waId: 'ORCLI010',
+                                title: 'Ordine Cliente #1',
+                                route: 'home/workArea/salesOrder/1',
+                                url: '/home/workArea/salesOrder/1'
+                            };
+
+                            if (typeof workareaService.openProgram === 'function') {
+                                workareaService.openProgram(menuItem);
+                            } else if (typeof workareaService.open === 'function') {
+                                workareaService.open(menuItem); 
+                            } else if (typeof workareaService.addWorkarea === 'function') {
+                                workareaService.addWorkarea(menuItem);
+                            } else if (typeof workareaService.add === 'function') {
+                                workareaService.add(menuItem);
+                            } else {
+                                console.warn("Metodo di apertura non identificato su workareaService.");
+                            }
                         } else {
-                            // Se falliscono tutti, ti mostra in console (F12) i metodi reali del servizio
-                            console.warn("Metodo di apertura non identificato. Funzioni disponibili in workareaService:", Object.keys(workareaService));
+                            console.error("Nessun servizio di routing o workarea identificato nell'ERP.");
                         }
                     } catch (error) {
-                        console.error("Errore durante l'esecuzione su workareaService:", error);
+                        console.error("Errore durante l'esecuzione del cambio rotta:", error);
                     }
                 });
             } else {
