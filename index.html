@@ -28,7 +28,7 @@
             align-items: center;
             justify-content: space-between;
             max-width: 1300px;
-            margin: 0 auto;
+            margin: 0 auto 30px auto;
             padding: 30px 20px;
             background: #ffffff;
             border-radius: 8px;
@@ -130,6 +130,8 @@
             width: 100%;
             margin-top: auto;
             box-sizing: border-box;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .btn-erp:hover {
@@ -140,11 +142,131 @@
             transform: scale(0.98);
         }
 
+        /* NUOVI STILI: Sezione Inferiore (Overview & Grafico) */
+        .bottom-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            gap: 20px;
+            align-items: stretch;
+        }
+
+        .overview-box {
+            flex: 1;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .overview-box h4 {
+            margin: 0 0 15px 0;
+            color: #2f4050;
+            font-size: 18px;
+        }
+
+        .btn-powerbi {
+            background-color: #f2c811;
+            color: #2f4050;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 6px;
+            text-decoration: none;
+            box-shadow: 0 3px 6px rgba(242, 200, 17, 0.3);
+            transition: background-color 0.2s, transform 0.1s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-powerbi:hover {
+            background-color: #e0b80f;
+            transform: translateY(-1px);
+        }
+
+        .chart-box {
+            flex: 2;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .chart-box h4 {
+            margin: 0 0 15px 0;
+            color: #2f4050;
+            font-size: 16px;
+        }
+
+        /* Struttura del Grafico di Esempio */
+        .bar-chart {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: 140px;
+            padding-top: 10px;
+            border-bottom: 2px solid #e2e8f0;
+            gap: 8px;
+        }
+
+        .chart-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            justify-content: flex-end;
+        }
+
+        .bar {
+            width: 100%;
+            background-color: #23c6c8;
+            border-radius: 3px 3px 0 0;
+            transition: background-color 0.2s;
+            position: relative;
+        }
+
+        .bar:hover {
+            background-color: #1c9d9f;
+        }
+
+        /* Tooltip del valore sulla barra */
+        .bar::after {
+            content: attr(data-value);
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            font-weight: bold;
+            color: #676a6c;
+        }
+
+        .month-label {
+            font-size: 11px;
+            color: #a7b1c2;
+            margin-top: 8px;
+            text-transform: uppercase;
+        }
+
         /* Animazione per le frecce */
         @keyframes pulse {
             0% { opacity: 0.5; }
             50% { opacity: 1; }
             100% { opacity: 0.5; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .bottom-container {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -212,6 +334,73 @@
             <h3 class="card-title">5. Invio Ordine</h3>
             <p class="card-actor">Sistema ERP / EDI</p>
             <span class="badge-info">Automatico</span>
+        </div>
+
+    </div>
+
+    <div class="bottom-container">
+        
+        <div class="overview-box">
+            <h4>Analisi Performance</h4>
+            <a href="https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=c29f5845-65ad-4af0-8996-894551d5a592" 
+               target="_blank" 
+               class="btn-powerbi">
+               📊 Overview Supplier
+            </a>
+        </div>
+
+        <div class="chart-box">
+            <h4>Andamento Forniture per Mese (Esempio)</h4>
+            <div class="bar-chart">
+                <div class="chart-column">
+                    <div class="bar" style="height: 45%;" data-value="45"></div>
+                    <div class="month-label">Gen</div>
+                </div>
+                <div class="chart-column">
+                    <div class="bar" style="height: 60%;" data-value="60"></div>
+                    <div class="month-label">Feb</div>
+                </div>
+                <div class="chart-column">
+                    <div class="bar" style="height: 55%;" data-value="55"></div>
+                    <div class="month-label">Mar</div>
+                </div>
+                <div class="chart-column">
+                    <div class="bar" style="height: 75%;" data-value="75"></div>
+                    <div class="month-label">Apr</div>
+                </div>
+                <div class="chart-column">
+                    <div class="bar" style="height: 90%;" data-value="90"></div>
+                    <div class="month-label">Mag</div>
+                </div>
+                <div class="chart-column">
+                    <div class="bar" style="height: 80%;" data-value="80"></div>
+                    <div class="month-label">Giu</div>
+                </div>
+                <div class="chart-column">
+                    <div class="bar" style="height: 65%;" data-value="65"></div>
+                    <div class="month-label">Lug</div>
+                </div>
+                <div class="chart-column">
+                    <div class="bar" style="height: 40%;" data-value="40"></div>
+                    <div class="month-label">Ago</div>
+                </div>
+                <div class="chart-column">
+                    <div class="bar" style="height: 70%;" data-value="70"></div>
+                    <div class="month-label">Set</div>
+                </div>
+                <div class="chart-column">
+                    <div class="bar" style="height: 85%;" data-value="85"></div>
+                    <div class="month-label">Ott</div>
+                </div>
+                <div class="chart-column">
+                    <div class="bar" style="height: 95%;" data-value="95"></div>
+                    <div class="month-label">Nov</div>
+                </div>
+                <div class="chart-column">
+                    <div class="bar" style="height: 100%;" data-value="100"></div>
+                    <div class="month-label">Dic</div>
+                </div>
+            </div>
         </div>
 
     </div>
