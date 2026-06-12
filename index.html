@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Procurement Process Flow</title>
     <style>
-        /* Riduzione globale della pagina di un ulteriore 10% (totale 80% dell'originale) e allineamento a sinistra */
+        /* Riduzione globale della pagina del 20% (totale 80% dell'originale) e allineamento a sinistra */
         .page-wrapper {
             transform: scale(0.8);
             transform-origin: top left;
@@ -23,20 +23,20 @@
             overflow-x: hidden;
         }
 
-        /* Banner unico Giallo Pantone che unisce visivamente i blocchi */
-        .procurement-banner {
+        /* Banner unico e unificato Giallo Pantone per tutto il flusso */
+        .procurement-banner-unified {
             background-color: #FED100;
-            width: 100%;
+            max-width: 1300px;
             padding: 12px 20px;
             border-radius: 6px 6px 0 0;
             box-sizing: border-box;
-            margin-bottom: -10px; /* Unisce il banner al contenuto sottostante */
+            margin: 0 0 -10px 0;
             display: flex;
             align-items: center;
         }
 
         /* Titolo Procurement tutto nero dentro il banner */
-        .procurement-banner h2 {
+        .procurement-banner-unified h2 {
             color: #000000;
             font-size: 21.6px;
             text-transform: uppercase;
@@ -54,19 +54,19 @@
         /* Container del flusso orizzontale allineato a sinistra */
         .horizontal-flow {
             display: flex;
-            align-items: flex-end; /* Allinea gli elementi sul fondo per bilanciare l'altezza */
-            justify-content: flex-start; /* Allinea a sinistra */
+            align-items: flex-end;
+            justify-content: flex-start;
             max-width: 1300px;
-            margin: 0 0 30px 0; /* Rimosso auto per bloccare a sinistra */
+            margin: 0 0 30px 0;
             padding: 30px 20px;
             background: #ffffff;
-            border-radius: 8px;
+            border-radius: 0 0 8px 8px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             overflow-x: auto;
             gap: 15px;
         }
 
-        /* Contenitore per impilare Supplier e Creazione OdA */
+        /* Contenitore per lo step centrale singolo */
         .vertical-step-group {
             display: flex;
             flex-direction: column;
@@ -92,11 +92,6 @@
             min-height: 200px;
             box-sizing: border-box;
             transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        /* Variante per le schede nel gruppo verticale per ottimizzare lo spazio */
-        .vertical-step-group .flow-card {
-            min-height: 180px;
         }
 
         .flow-card:hover {
@@ -126,18 +121,13 @@
             line-height: 1.2;
         }
 
-        /* Frecce di collegamento */
+        /* Frecce di collegamento della stessa altezza */
         .flow-arrow {
             font-size: 24px;
             color: #cbd5e1;
             user-select: none;
             animation: pulse 2s infinite;
             align-self: center;
-            margin-bottom: 85px; /* Centra la freccia verticalmente rispetto alle schede */
-        }
-
-        /* Correzione freccia centrale che non ha il banner sopra */
-        .vertical-step-group + .flow-arrow {
             margin-bottom: 0;
         }
 
@@ -175,14 +165,10 @@
             background-color: #18a689;
         }
 
-        .btn-erp:active {
-            transform: scale(0.98);
-        }
-
         /* Sezione Inferiore (Overview & Grafico) allineata a sinistra */
         .bottom-container {
             max-width: 1300px;
-            margin: 0 0 40px 0; /* Bloccata a sinistra */
+            margin: 0 0 40px 0;
             display: flex;
             gap: 20px;
             align-items: stretch;
@@ -222,35 +208,75 @@
         .btn-powerbi:hover {
             background-color: #e0b80f;
             transform: translateY(-2px);
-            box-shadow: 0 6px 14px rgba(242, 200, 17, 0.5);
         }
 
+        /* Contenitore dei widget */
         .chart-box {
             flex: 2;
             background: #ffffff;
             border-radius: 8px;
             padding: 20px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .chart-box h4 {
-            margin: 0 0 15px 0;
-            color: #2f4050;
-            font-size: 16px;
-        }
-
-        /* Struttura del Grafico di Esempio */
-        .bar-chart {
+        .dashboard-widgets {
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
+            align-items: stretch;
+            gap: 15px;
             height: 140px;
-            padding-top: 10px;
-            border-bottom: 2px solid #e2e8f0;
-            gap: 8px;
         }
 
-        .chart-column-link {
+        .widget-item {
+            flex: 1;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        /* Variante interattiva del widget per i link */
+        .widget-item-link {
+            text-decoration: none;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+
+        .widget-item-link:hover {
+            opacity: 0.9;
+            transform: scale(1.01);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .widget-title {
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #718096;
+            margin: 0 0 5px 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Oggetto 1: Colonne ordini aperti */
+        .mini-bar-chart {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            width: 100%;
+            height: 90px;
+            gap: 4px;
+        }
+
+        .mini-col-link {
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -259,52 +285,118 @@
             justify-content: flex-end;
             text-decoration: none;
             cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
         }
 
-        .bar {
+        .mini-col-link:hover {
+            opacity: 0.85;
+            transform: scale(1.02);
+        }
+
+        .m-bar {
             width: 100%;
-            background-color: #23c6c8;
-            border-radius: 3px 3px 0 0;
-            transition: background-color 0.2s, transform 0.1s;
+            border-radius: 2px 2px 0 0;
             position: relative;
-        }
-
-        .chart-column-link:hover .bar {
-            background-color: #1c9d9f;
-            transform: scaleY(1.03);
-        }
-
-        .bar::after {
-            content: attr(data-value);
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 10px;
-            font-weight: bold;
-            color: #676a6c;
-        }
-
-        .month-label {
-            font-size: 11px;
-            color: #a7b1c2;
-            margin-top: 8px;
-            text-transform: uppercase;
-            font-weight: 600;
+            min-height: 5px;
         }
         
-        .chart-column-link:hover .month-label {
-            color: #1c9d9f;
+        .m-bar::after {
+            content: attr(data-val);
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 9px;
+            font-weight: bold;
+            color: #4a5568;
         }
 
-        /* Animazione per le frecce */
+        .col-lbl {
+            font-size: 8px;
+            font-weight: 600;
+            color: #a7b1c2;
+            margin-top: 4px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .bg-anticipo { background-color: #1c84c6; }
+        .bg-tempi { background-color: #1ab394; }
+        .bg-rischio { background-color: #f8ac59; }
+        .bg-ritardo { background-color: #ed5565; }
+
+        /* Oggetto 2: Manometro */
+        .gauge-container {
+            position: relative;
+            width: 100px;
+            height: 50px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .gauge-body {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            position: absolute;
+            box-sizing: border-box;
+            border: 15px solid #e2e8f0;
+            border-bottom-color: #ed5565;
+            border-left-color: #1ab394;
+            border-top-color: #f8ac59;
+        }
+
+        .gauge-needle {
+            width: 4px;
+            height: 45px;
+            background: #2f4050;
+            position: absolute;
+            bottom: 0;
+            left: 48px;
+            transform-origin: bottom center;
+            transform: rotate(45deg); /* Spostata leggermente più a destra verso il rosso */
+            border-radius: 2px;
+        }
+
+        .gauge-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2f4050;
+            margin-top: 5px;
+        }
+
+        /* Oggetto 3: Counter Solleciti */
+        .counter-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+        }
+
+        .counter-number-link {
+            font-size: 38px;
+            font-weight: 800;
+            color: #ed5565;
+            line-height: 1;
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform 0.1s, color 0.2s;
+            display: inline-block;
+        }
+
+        .counter-number-link:hover {
+            color: #da4453;
+            transform: scale(1.1);
+        }
+
         @keyframes pulse {
             0% { opacity: 0.5; }
             50% { opacity: 1; }
             100% { opacity: 0.5; }
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .page-wrapper {
                 transform: none;
@@ -312,10 +404,6 @@
             }
             .bottom-container {
                 flex-direction: column;
-            }
-            .btn-powerbi {
-                width: 100%;
-                box-sizing: border-box;
             }
             .horizontal-flow {
                 flex-direction: column;
@@ -325,9 +413,16 @@
                 flex-direction: column;
             }
             .flow-arrow {
-                margin-bottom: 0 !important;
+                margin: 10px 0 10px 70px !important;
                 align-self: flex-start;
-                margin-left: 70px;
+            }
+            .dashboard-widgets {
+                flex-direction: column;
+                height: auto;
+            }
+            .widget-item {
+                width: 100%;
+                height: 130px;
             }
         }
     </style>
@@ -336,49 +431,37 @@
 
 <div class="page-wrapper">
 
+    <div class="procurement-banner-unified">
+        <h2>Procurement</h2>
+    </div>
+
     <div class="horizontal-flow">
 
-        <div style="display: flex; flex-direction: column; align-items: flex-start; flex: 1;">
-            <div class="procurement-banner">
-                <h2>Procurement</h2>
+        <div class="procurement-group">
+            <div class="flow-card">
+                <div class="card-icon">📝</div>
+                <h3 class="card-title">1. Emissione RdA</h3>
+                <p class="card-actor">Utente Richiedente</p>
+                <button type="button" class="btn-erp" onclick="inviaMessaggioNavigazione('/home/workArea/purchaseRequestsAppl/1')">
+                    Crea RDA
+                </button>
             </div>
-            <div class="horizontal-flow" style="box-shadow: none; padding: 20px 0 0 0; margin: 0; width: 100%; border-radius: 0;">
-                <div class="procurement-group">
-                    <div class="flow-card">
-                        <div class="card-icon">📝</div>
-                        <h3 class="card-title">1. Emissione RdA</h3>
-                        <p class="card-actor">Utente Richiedente</p>
-                        <button type="button" class="btn-erp" onclick="inviaMessaggioNavigazione('/home/workArea/purchaseRequestsAppl/1')">
-                            Crea RDA
-                        </button>
-                    </div>
 
-                    <div class="flow-arrow" style="margin-bottom: 0;">➡️</div>
+            <div class="flow-arrow">➡️</div>
 
-                    <div class="flow-card">
-                        <div class="card-icon">✅</div>
-                        <h3 class="card-title">2. Approvazione</h3>
-                        <p class="card-actor">Responsabile / Budget</p>
-                        <button type="button" class="btn-erp" onclick="inviaMessaggioNavigazione('https://diapdemo.formula.it:8282/due/#/home/desktop/MT%20-%20TODOLIST')">
-                            Approva RdA
-                        </button>
-                    </div>
-                </div>
+            <div class="flow-card">
+                <div class="card-icon">✅</div>
+                <h3 class="card-title">2. Approvazione</h3>
+                <p class="card-actor">Responsabile / Budget</p>
+                <button type="button" class="btn-erp" onclick="inviaMessaggioNavigazione('https://diapdemo.formula.it:8282/due/#/home/desktop/MT%20-%20TODOLIST')">
+                    Approva RdA
+                </button>
             </div>
         </div>
 
         <div class="flow-arrow">➡️</div>
 
         <div class="vertical-step-group">
-            <div class="flow-card">
-                <div class="card-icon">🔍</div>
-                <h3 class="card-title">Supplier</h3>
-                <p class="card-actor">Buyer / Acquisti</p>
-                <button type="button" class="btn-erp" onclick="inviaMessaggioNavigazione('https://diapdemo.formula.it:8282/due/#/home/workArea/subjectListAnid/1')">
-                    Gestisci Fornitori
-                </button>
-            </div>
-
             <div class="flow-card">
                 <div class="card-icon">🛒</div>
                 <h3 class="card-title">3. Creazione OdA</h3>
@@ -391,28 +474,21 @@
 
         <div class="flow-arrow">➡️</div>
 
-        <div style="display: flex; flex-direction: column; align-items: flex-start; flex: 1;">
-            <div class="procurement-banner">
-                <div style="height: 29px;"></div> 
+        <div class="ordine-group">
+            <div class="flow-card">
+                <div class="card-icon">👔</div>
+                <h3 class="card-title">4. Autorizzazione</h3>
+                <p class="card-actor">Direzione Acquisti</p>
+                <span class="badge-info">Workflow</span>
             </div>
-            <div class="horizontal-flow" style="box-shadow: none; padding: 20px 0 0 0; margin: 0; width: 100%; border-radius: 0;">
-                <div class="ordine-group">
-                    <div class="flow-card">
-                        <div class="card-icon">👔</div>
-                        <h3 class="card-title">4. Autorizzazione</h3>
-                        <p class="card-actor">Direzione Acquisti</p>
-                        <span class="badge-info">Workflow</span>
-                    </div>
 
-                    <div class="flow-arrow" style="margin-bottom: 0;">➡️</div>
+            <div class="flow-arrow">➡️</div>
 
-                    <div class="flow-card">
-                        <div class="card-icon">🚀</div>
-                        <h3 class="card-title">5. Invio Ordine</h3>
-                        <p class="card-actor">Sistema ERP / EDI</p>
-                        <span class="badge-info">Automatico</span>
-                    </div>
-                </div>
+            <div class="flow-card">
+                <div class="card-icon">🚀</div>
+                <h3 class="card-title">5. Invio Ordine</h3>
+                <p class="card-actor">Sistema ERP / EDI</p>
+                <span class="badge-info">Automatico</span>
             </div>
         </div>
 
@@ -429,68 +505,52 @@
         </div>
 
         <div class="chart-box">
-            <h4>Andamento Forniture per Mese</h4>
-            <div class="bar-chart">
+            <div class="dashboard-widgets">
                 
-                <a class="chart-column-link" href="https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=c29f5845-65ad-4af0-8996-894551d5a592" target="_blank">
-                    <div class="bar" style="height: 45%;" data-value="45"></div>
-                    <div class="month-label">Gen</div>
+                <div class="widget-item">
+                    <div class="widget-title">Overview acquisti</div>
+                    <div class="mini-bar-chart">
+                        
+                        <a class="mini-col-link" onclick="inviaMessaggioNavigazione('https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=baf3793c-33e3-4cd9-b5d4-d9454cf85c66')">
+                            <div class="m-bar bg-anticipo" style="height: 40%;" data-val="12"></div>
+                            <div class="col-lbl">Anticipo</div>
+                        </a>
+                        
+                        <a class="mini-col-link" onclick="inviaMessaggioNavigazione('https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=baf3793c-33e3-4cd9-b5d4-d9454cf85c66')">
+                            <div class="m-bar bg-tempi" style="height: 85%;" data-val="34"></div>
+                            <div class="col-lbl">Nei Tempi</div>
+                        </a>
+                        
+                        <a class="mini-col-link" onclick="inviaMessaggioNavigazione('https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=baf3793c-33e3-4cd9-b5d4-d9454cf85c66')">
+                            <div class="m-bar bg-rischio" style="height: 25%;" data-val="8"></div>
+                            <div class="col-lbl">A Rischio</div>
+                        </a>
+                        
+                        <a class="mini-col-link" onclick="inviaMessaggioNavigazione('https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=baf3793c-33e3-4cd9-b5d4-d9454cf85c66')">
+                            <div class="m-bar bg-ritardo" style="height: 55%;" data-val="19"></div>
+                            <div class="col-lbl">Ritardo</div>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                <a class="widget-item widget-item-link" onclick="inviaMessaggioNavigazione('https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=baf3793c-33e3-4cd9-b5d4-d9454cf85c66')">
+                    <div class="widget-title">Valore Merce in Ritardo</div>
+                    <div class="gauge-container">
+                        <div class="gauge-body"></div>
+                        <div class="gauge-needle"></div>
+                    </div>
+                    <div class="gauge-value">27,0 k€</div>
                 </a>
-                
-                <a class="chart-column-link" href="https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=c29f5845-65ad-4af0-8996-894551d5a592" target="_blank">
-                    <div class="bar" style="height: 60%;" data-value="60"></div>
-                    <div class="month-label">Feb</div>
-                </a>
-                
-                <a class="chart-column-link" href="https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=c29f5845-65ad-4af0-8996-894551d5a592" target="_blank">
-                    <div class="bar" style="height: 55%;" data-value="55"></div>
-                    <div class="month-label">Mar</div>
-                </a>
-                
-                <a class="chart-column-link" href="https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=c29f5845-65ad-4af0-8996-894551d5a592" target="_blank">
-                    <div class="bar" style="height: 75%;" data-value="75"></div>
-                    <div class="month-label">Apr</div>
-                </a>
-                
-                <a class="chart-column-link" href="https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=c29f5845-65ad-4af0-8996-894551d5a592" target="_blank">
-                    <div class="bar" style="height: 90%;" data-value="90"></div>
-                    <div class="month-label">Mag</div>
-                </a>
-                
-                <a class="chart-column-link" href="https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=c29f5845-65ad-4af0-8996-894551d5a592" target="_blank">
-                    <div class="bar" style="height: 80%;" data-value="80"></div>
-                    <div class="month-label">Giu</div>
-                </a>
-                
-                <a class="chart-column-link" href="https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=c29f5845-65ad-4af0-8996-894551d5a592" target="_blank">
-                    <div class="bar" style="height: 65%;" data-value="65"></div>
-                    <div class="month-label">Lug</div>
-                </a>
-                
-                <a class="chart-column-link" href="https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=c29f5845-65ad-4af0-8996-894551d5a592" target="_blank">
-                    <div class="bar" style="height: 40%;" data-value="40"></div>
-                    <div class="month-label">Ago</div>
-                </a>
-                
-                <a class="chart-column-link" href="https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=c29f5845-65ad-4af0-8996-894551d5a592" target="_blank">
-                    <div class="bar" style="height: 70%;" data-value="70"></div>
-                    <div class="month-label">Set</div>
-                </a>
-                
-                <a class="chart-column-link" href="https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=c29f5845-65ad-4af0-8996-894551d5a592" target="_blank">
-                    <div class="bar" style="height: 85%;" data-value="85"></div>
-                    <div class="month-label">Ott</div>
-                </a>
-                
-                <a class="chart-column-link" href="https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=c29f5845-65ad-4af0-8996-894551d5a592" target="_blank">
-                    <div class="bar" style="height: 95%;" data-value="95"></div>
-                    <div class="month-label">Nov</div>
-                </a>
-                
-                <a class="chart-column-link" href="https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=c29f5845-65ad-4af0-8996-894551d5a592" target="_blank">
-                    <div class="bar" style="height: 100%;" data-value="100"></div>
-                    <div class="month-label">Dic</div>
-                </a>
+
+                <div class="widget-item">
+                    <div class="widget-title">Ordini da Sollecitare</div>
+                    <div class="counter-container">
+                        <a class="counter-number-link" onclick="inviaMessaggioNavigazione('https://diapdemo.formula.it:8282/due/#/home/workArea/dnow2/SKSD/1')">
+                            27
+                        </a>
+                    </div>
+                </div>
                 
             </div>
         </div>
@@ -519,7 +579,7 @@
         try {
             window.parent.postMessage(payload, '*');
             window.parent.postMessage(JSON.stringify(payload), '*');
-            console.log("Messaggio inviato correttamente al sistema ERP.");
+            console.log("Messaggio inviato correttamente.");
         } catch (e) {
             console.error("Errore durante l'esecuzione del postMessage:", e);
         }
