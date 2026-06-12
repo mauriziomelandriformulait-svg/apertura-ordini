@@ -243,11 +243,15 @@
             box-sizing: border-box;
         }
 
-        /* Variante interattiva del widget per i link */
+        /* Variante div-link interattiva per il Manometro */
         .widget-item-link {
             text-decoration: none;
             cursor: pointer;
             transition: opacity 0.2s, transform 0.1s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .widget-item-link:hover {
@@ -355,7 +359,7 @@
             bottom: 0;
             left: 48px;
             transform-origin: bottom center;
-            transform: rotate(45deg); /* Spostata leggermente più a destra verso il rosso */
+            transform: rotate(45deg);
             border-radius: 2px;
         }
 
@@ -511,22 +515,22 @@
                     <div class="widget-title">Overview acquisti</div>
                     <div class="mini-bar-chart">
                         
-                        <a class="mini-col-link" onclick="inviaMessaggioNavigazione('https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=baf3793c-33e3-4cd9-b5d4-d9454cf85c66')">
+                        <a class="mini-col-link" target="_blank" href="https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=baf3793c-33e3-4cd9-b5d4-d9454cf85c66">
                             <div class="m-bar bg-anticipo" style="height: 40%;" data-val="12"></div>
                             <div class="col-lbl">Anticipo</div>
                         </a>
                         
-                        <a class="mini-col-link" onclick="inviaMessaggioNavigazione('https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=baf3793c-33e3-4cd9-b5d4-d9454cf85c66')">
+                        <a class="mini-col-link" target="_blank" href="https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=baf3793c-33e3-4cd9-b5d4-d9454cf85c66">
                             <div class="m-bar bg-tempi" style="height: 85%;" data-val="34"></div>
                             <div class="col-lbl">Nei Tempi</div>
                         </a>
                         
-                        <a class="mini-col-link" onclick="inviaMessaggioNavigazione('https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=baf3793c-33e3-4cd9-b5d4-d9454cf85c66')">
+                        <a class="mini-col-link" target="_blank" href="https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=baf3793c-33e3-4cd9-b5d4-d9454cf85c66">
                             <div class="m-bar bg-rischio" style="height: 25%;" data-val="8"></div>
                             <div class="col-lbl">A Rischio</div>
                         </a>
                         
-                        <a class="mini-col-link" onclick="inviaMessaggioNavigazione('https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=baf3793c-33e3-4cd9-b5d4-d9454cf85c66')">
+                        <a class="mini-col-link" target="_blank" href="https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=baf3793c-33e3-4cd9-b5d4-d9454cf85c66">
                             <div class="m-bar bg-ritardo" style="height: 55%;" data-val="19"></div>
                             <div class="col-lbl">Ritardo</div>
                         </a>
@@ -534,7 +538,7 @@
                     </div>
                 </div>
 
-                <a class="widget-item widget-item-link" onclick="inviaMessaggioNavigazione('https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=baf3793c-33e3-4cd9-b5d4-d9454cf85c66')">
+                <a class="widget-item widget-item-link" target="_blank" href="https://app.powerbi.com/Redirect?action=OpenReport&appId=67590226-b26e-469d-829c-2df580e3f619&reportObjectId=47377006-42ae-495c-abbc-99d48c877e90&ctid=ba941aaf-4ef6-4eae-8cee-441f432b943a&reportPage=ReportSectionf766317e5704274c3a27&pbi_source=appShareLink&portalSessionId=baf3793c-33e3-4cd9-b5d4-d9454cf85c66">
                     <div class="widget-title">Valore Merce in Ritardo</div>
                     <div class="gauge-container">
                         <div class="gauge-body"></div>
@@ -560,6 +564,7 @@
 </div>
 
     <script>
+    // Questa funzione è ora utilizzata correttamente solo ed esclusivamente per i percorsi interni dell'ERP
     function inviaMessaggioNavigazione(percorsoTarget) {
         
         let routePath = percorsoTarget;
@@ -574,12 +579,12 @@
             route: routePath
         };
 
-        console.log("Invio comando via postMessage per il percorso: " + percorsoTarget);
+        console.log("Invio comando via postMessage per il percorso interno: " + percorsoTarget);
 
         try {
             window.parent.postMessage(payload, '*');
             window.parent.postMessage(JSON.stringify(payload), '*');
-            console.log("Messaggio inviato correttamente.");
+            console.log("Messaggio inviato correttamente all'ERP.");
         } catch (e) {
             console.error("Errore durante l'esecuzione del postMessage:", e);
         }
