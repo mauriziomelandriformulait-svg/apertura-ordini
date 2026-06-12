@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Procurement Process Flow</title>
     <style>
-        /* Riduzione globale della pagina del 10% mantenendo il layout centrato */
+        /* Riduzione globale della pagina di un ulteriore 10% (totale 80% dell'originale) e allineamento a sinistra */
         .page-wrapper {
-            transform: scale(0.9);
-            transform-origin: top center;
-            width: 111.11%; /* Compensa lo scale per non stringere il contenuto */
+            transform: scale(0.8);
+            transform-origin: top left;
+            width: 125%; /* Compensa lo scale 0.8 per occupare lo spazio corretto a sinistra */
             box-sizing: border-box;
-            margin: 0 auto;
+            margin: 0;
         }
 
         body {
@@ -51,19 +51,19 @@
             gap: 10px;
         }
 
-        /* Container del flusso orizzontale */
+        /* Container del flusso orizzontale allineato a sinistra */
         .horizontal-flow {
             display: flex;
             align-items: flex-end; /* Allinea gli elementi sul fondo per bilanciare l'altezza */
-            justify-content: space-between;
+            justify-content: flex-start; /* Allinea a sinistra */
             max-width: 1300px;
-            margin: 0 auto 30px auto;
+            margin: 0 0 30px 0; /* Rimosso auto per bloccare a sinistra */
             padding: 30px 20px;
             background: #ffffff;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             overflow-x: auto;
-            gap: 10px;
+            gap: 15px;
         }
 
         /* Contenitore per impilare Supplier e Creazione OdA */
@@ -179,10 +179,10 @@
             transform: scale(0.98);
         }
 
-        /* Sezione Inferiore (Overview & Grafico) */
+        /* Sezione Inferiore (Overview & Grafico) allineata a sinistra */
         .bottom-container {
             max-width: 1300px;
-            margin: 0 auto;
+            margin: 0 0 40px 0; /* Bloccata a sinistra */
             display: flex;
             gap: 20px;
             align-items: stretch;
@@ -319,13 +319,15 @@
             }
             .horizontal-flow {
                 flex-direction: column;
-                align-items: center;
+                align-items: flex-start;
             }
             .procurement-group, .ordine-group {
                 flex-direction: column;
             }
             .flow-arrow {
                 margin-bottom: 0 !important;
+                align-self: flex-start;
+                margin-left: 70px;
             }
         }
     </style>
@@ -336,7 +338,7 @@
 
     <div class="horizontal-flow">
 
-        <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+        <div style="display: flex; flex-direction: column; align-items: flex-start; flex: 1;">
             <div class="procurement-banner">
                 <h2>Procurement</h2>
             </div>
@@ -389,7 +391,7 @@
 
         <div class="flow-arrow">➡️</div>
 
-        <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+        <div style="display: flex; flex-direction: column; align-items: flex-start; flex: 1;">
             <div class="procurement-banner">
                 <div style="height: 29px;"></div> 
             </div>
